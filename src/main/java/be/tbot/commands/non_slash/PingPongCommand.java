@@ -9,8 +9,11 @@ public class PingPongCommand extends ListenerAdapter {
     public void onMessageReceived(MessageReceivedEvent event) {
         if (event.getAuthor().isBot()) return;
 
-        if (event.getMessage().getContentRaw().equals("!ping")){
-            event.getChannel().sendMessage("pong!").queue();
+        var msg = event.getMessage().getContentRaw();
+        var channel = event.getChannel();
+
+        if (msg.equals("!ping")){
+            channel.sendMessage("pong!").queue();
         }
     }
 }
