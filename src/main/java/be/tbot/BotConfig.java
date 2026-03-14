@@ -35,7 +35,7 @@ public class BotConfig extends ListenerAdapter {
                         .addOption(OptionType.STRING, "reason", "Reason for kick (optional).", false),
                 Commands.slash("mute", "Mute a user (time out).")
                         .addOption(OptionType.USER, "username", "The user to be muted.", true)
-                        //TODO think about a more custom way to mute instead of only minutes (including days etc)
+                        //TODO think about a more custom way to mute instead of only minutes (including days etc.)
                         .addOption(OptionType.INTEGER, "minutes", "The amount of minutes the user needs to be muted for.", true)
         ).queue();
     }
