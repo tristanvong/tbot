@@ -8,7 +8,7 @@ import org.slf4j.LoggerFactory;
 
 public class Kick extends ListenerAdapter {
 
-    private final Logger logger = LoggerFactory.getLogger(Kick.class);
+    private static final Logger logger = LoggerFactory.getLogger(Kick.class);
 
     @Override
     public void onSlashCommandInteraction(SlashCommandInteractionEvent event) {

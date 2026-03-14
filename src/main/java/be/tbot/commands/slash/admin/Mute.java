@@ -10,7 +10,7 @@ import java.time.Duration;
 
 public class Mute extends ListenerAdapter {
 
-    private final Logger logger = LoggerFactory.getLogger(Mute.class);
+    private static final Logger logger = LoggerFactory.getLogger(Mute.class);
 
     @Override
     public void onSlashCommandInteraction(SlashCommandInteractionEvent event) {

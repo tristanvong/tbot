@@ -10,7 +10,7 @@ import java.util.concurrent.TimeUnit;
 
 public class Ban extends ListenerAdapter {
 
-    final static Logger logger = LoggerFactory.getLogger(Ban.class);
+    private static final Logger logger = LoggerFactory.getLogger(Ban.class);
 
     @Override
     public void onSlashCommandInteraction(SlashCommandInteractionEvent event) {

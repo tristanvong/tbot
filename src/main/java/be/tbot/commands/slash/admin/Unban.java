@@ -8,7 +8,7 @@ import org.slf4j.LoggerFactory;
 
 public class Unban extends ListenerAdapter {
 
-    private final Logger logger = LoggerFactory.getLogger(Unban.class);
+    private static final Logger logger = LoggerFactory.getLogger(Unban.class);
 
     @Override
     public void onSlashCommandInteraction(SlashCommandInteractionEvent event) {
