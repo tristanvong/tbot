@@ -6,7 +6,7 @@ COPY gradle/ gradle/
 
 COPY build.gradle.kts settings.gradle.kts gradlew ./
 
-COPY ./src ./src/
+COPY src/ src/
 
 RUN ./gradlew clean shadowJar
 
