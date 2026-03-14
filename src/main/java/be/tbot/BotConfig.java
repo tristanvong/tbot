@@ -12,6 +12,9 @@ import net.dv8tion.jda.api.interactions.commands.build.Commands;
 
 public class BotConfig extends ListenerAdapter {
 
+    public static long LOG_CHANNEL_ID = Long.parseLong(System.getenv("LOG_CHANNEL_ID"));
+    public static long DARWIN_CHANNEL_ID = Long.parseLong(System.getenv("DARWIN_CHANNEL_ID"));
+
     @Override
     public void onReady(ReadyEvent event) {
         var jda = event.getJDA();
@@ -28,15 +31,15 @@ public class BotConfig extends ListenerAdapter {
                         .addOption(OptionType.USER, "username", "The user to be banned.", true)
                         .addOption(OptionType.STRING,"reason", "Reason for ban (optional).", false),
                 Commands.slash("unban", "Unban a user.")
-                        //TODO add reason option
-                        .addOption(OptionType.USER, "username", "The user to be unbanned.", true),
+                        .addOption(OptionType.USER, "username", "The user to be unbanned.", true)
+                        .addOption(OptionType.STRING, "reason", "Reason for unban (optional).", false),
                 Commands.slash("kick", "Kick a user.")
                         .addOption(OptionType.USER, "username", "The user to be kicked.", true)
                         .addOption(OptionType.STRING, "reason", "Reason for kick (optional).", false),
                 Commands.slash("mute", "Mute a user (time out).")
                         .addOption(OptionType.USER, "username", "The user to be muted.", true)
-                        //TODO think about a more custom way to mute instead of only minutes (including days etc.)
                         .addOption(OptionType.INTEGER, "minutes", "The amount of minutes the user needs to be muted for.", true)
+                        .addOption(OptionType.INTEGER, "days", "The amount of days the user needs to be muted for (optional).", false)
         ).queue();
     }
 }
