@@ -4,3 +4,6 @@ services:
     container_name: bot
     environment:
       - BOT_TOKEN=${BOT_TOKEN}
+      - LOG_CHANNEL_ID=${LOG_CHANNEL_ID}
+      - DARWIN_CHANNEL_ID=${DARWIN_CHANNEL_ID}
+      - BANNED_WORDS=${BANNED_WORDS}

@@ -1,6 +1,8 @@
 package be.tbot.commands.slash.admin;
 
+import be.tbot.BotConfig;
 import net.dv8tion.jda.api.entities.UserSnowflake;
+import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import org.slf4j.Logger;
@@ -8,12 +10,12 @@ import org.slf4j.LoggerFactory;
 
 public class Unban extends ListenerAdapter {
 
-    private final Logger logger = LoggerFactory.getLogger(Unban.class);
+    private static final Logger logger = LoggerFactory.getLogger(Unban.class);
+    private static final long DARWIN_CHANNEL_ID = BotConfig.DARWIN_CHANNEL_ID;
 
     @Override
     public void onSlashCommandInteraction(SlashCommandInteractionEvent event) {
         if (event.getName().equals("unban")) {
-            //TODO add reason (optional) to unban
 
             event.deferReply().queue();
 
@@ -23,7 +25,23 @@ public class Unban extends ListenerAdapter {
 
             logger.info("SLASH_COMMAND unban called by {} on {}", eventUser, targetUser);
 
-            event.getGuild().unban(usrSnowflake).queue();
+            try {
+                var reason = event.getOption("reason").getAsString();
+                unban(event, usrSnowflake, reason);
+            } catch (NullPointerException e) {
+                unban(event, usrSnowflake, "No reason provided.");
+                logger.error("NullPointerException: \"reason\" in ban command null. \n{}", e.getMessage());
+            }
         }
+    }
+
+    private static void unban(SlashCommandInteractionEvent event, UserSnowflake usrSnowflake, String reason) {
+        event.getGuild().unban(usrSnowflake)
+                .reason(reason)
+                .queue(success -> {
+                    event.getHook().getInteraction().getGuild()
+                            .getChannelById(TextChannel.class, DARWIN_CHANNEL_ID)
+                            .sendMessage("Unbanned user: " + usrSnowflake.getAsMention()).queue();
+                });
     }
 }

@@ -1,6 +1,8 @@
 package be.tbot.commands.slash.admin;
 
+import be.tbot.BotConfig;
 import net.dv8tion.jda.api.entities.UserSnowflake;
+import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import org.slf4j.Logger;
@@ -10,7 +12,8 @@ import java.util.concurrent.TimeUnit;
 
 public class Ban extends ListenerAdapter {
 
-    final static Logger logger = LoggerFactory.getLogger(Ban.class);
+    private static final Logger logger = LoggerFactory.getLogger(Ban.class);
+    private static final long DARWIN_CHANNEL_ID = BotConfig.DARWIN_CHANNEL_ID;
 
     @Override
     public void onSlashCommandInteraction(SlashCommandInteractionEvent event) {
@@ -29,16 +32,21 @@ public class Ban extends ListenerAdapter {
 
                 logger.debug("USER INPUT: [reason] possible null: {}", reason);
 
-                banThem(event, usrSnowflake, reason);
+                ban(event, usrSnowflake, reason);
             } catch (NullPointerException e) {
-                banThem(event, usrSnowflake, "No reason provided.");
+                ban(event, usrSnowflake, "No reason provided.");
+                logger.error("NullPointerException: \"reason\" in ban command null. \n{}", e.getMessage());
             }
         }
     }
 
-    static private void banThem(SlashCommandInteractionEvent event, UserSnowflake usrSnowflake, String reason){
+    private static void ban(SlashCommandInteractionEvent event, UserSnowflake usrSnowflake, String reason){
         event.getGuild().ban(usrSnowflake, 0, TimeUnit.SECONDS)
                 .reason(reason)
-                .queue();
+                .queue(unused -> {
+                    event.getHook().getInteraction().getGuild()
+                            .getChannelById(TextChannel.class, DARWIN_CHANNEL_ID)
+                            .sendMessage("Banned user: " + usrSnowflake.getAsMention()).queue();
+                });
     }
 }

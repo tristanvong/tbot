@@ -1,6 +1,8 @@
 package be.tbot.commands.slash.admin;
 
+import be.tbot.BotConfig;
 import net.dv8tion.jda.api.entities.UserSnowflake;
+import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import org.slf4j.Logger;
@@ -8,7 +10,8 @@ import org.slf4j.LoggerFactory;
 
 public class Kick extends ListenerAdapter {
 
-    private final Logger logger = LoggerFactory.getLogger(Kick.class);
+    private static final Logger logger = LoggerFactory.getLogger(Kick.class);
+    private static final long DARWIN_CHANNEL_ID = BotConfig.DARWIN_CHANNEL_ID;
 
     @Override
     public void onSlashCommandInteraction(SlashCommandInteractionEvent event) {
@@ -24,13 +27,23 @@ public class Kick extends ListenerAdapter {
 
             try {
                 var reason = event.getOption("reason").getAsString();
+                kick(event, usrSnowflake, reason);
 
-                logger.debug("USER INPUT: [reason] possible null: {}", reason);
-                //TODO put this in a static method like in Ban.java (banThem)
-                event.getGuild().kick(usrSnowflake).reason(reason).queue();
             } catch (NullPointerException e) {
-                event.getGuild().kick(usrSnowflake).reason("No reason provided.").queue();
+                kick(event, usrSnowflake, "No reason provided.");
+                logger.error("NullPointerException: \"reason\" in ban command null. \n{}", e.getMessage());
             }
         }
+    }
+
+    private static void kick(SlashCommandInteractionEvent event, UserSnowflake usrSnowflake, String reason) {
+        event.getGuild()
+                .kick(usrSnowflake)
+                .reason(reason)
+                .queue(success -> {
+                    event.getHook().getInteraction().getGuild()
+                            .getChannelById(TextChannel.class, DARWIN_CHANNEL_ID)
+                            .sendMessage("Kicked user: " + usrSnowflake.getAsMention()).queue();
+                });
     }
 }
