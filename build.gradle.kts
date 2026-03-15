@@ -19,7 +19,7 @@ dependencies {
     implementation("net.dv8tion:JDA:6.3.1")
     implementation("ch.qos.logback:logback-classic:1.5.32")
 
-    testImplementation(platform("org.junit:junit-bom:5.10.0"))
+    testImplementation(platform("org.junit:junit-bom:6.0.3"))
     testImplementation("org.junit.jupiter:junit-jupiter")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }
