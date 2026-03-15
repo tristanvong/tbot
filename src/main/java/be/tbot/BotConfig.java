@@ -5,15 +5,24 @@ import be.tbot.commands.slash.admin.Ban;
 import be.tbot.commands.slash.admin.Kick;
 import be.tbot.commands.slash.admin.Mute;
 import be.tbot.commands.slash.admin.Unban;
+import be.tbot.other.BannedWords;
 import net.dv8tion.jda.api.events.session.ReadyEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.io.*;
 
 public class BotConfig extends ListenerAdapter {
 
-    public static long LOG_CHANNEL_ID = Long.parseLong(System.getenv("LOG_CHANNEL_ID"));
-    public static long DARWIN_CHANNEL_ID = Long.parseLong(System.getenv("DARWIN_CHANNEL_ID"));
+    public static final long LOG_CHANNEL_ID = Long.parseLong(System.getenv("LOG_CHANNEL_ID"));
+    public static final long DARWIN_CHANNEL_ID = Long.parseLong(System.getenv("DARWIN_CHANNEL_ID"));
+    public static final String BANNED_WORDS = System.getenv("BANNED_WORDS");
+    public static final String[] BANNED_WORDS_LIST = BANNED_WORDS.split(",");
+
+    private static final Logger logger = LoggerFactory.getLogger(BotConfig.class);
 
     @Override
     public void onReady(ReadyEvent event) {
@@ -24,6 +33,8 @@ public class BotConfig extends ListenerAdapter {
                 new Unban(),
                 new Kick(),
                 new Mute(),
+                new BannedWords(),
+                //non-slash commands:
                 new PingPongCommand());
 
         jda.updateCommands().addCommands(
