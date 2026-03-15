@@ -1,4 +1,4 @@
-package be.tbot.other;
+package be.tbot.moderation;
 
 import be.tbot.BotConfig;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;

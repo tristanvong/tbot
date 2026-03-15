@@ -5,15 +5,13 @@ import be.tbot.commands.slash.admin.Ban;
 import be.tbot.commands.slash.admin.Kick;
 import be.tbot.commands.slash.admin.Mute;
 import be.tbot.commands.slash.admin.Unban;
-import be.tbot.other.BannedWords;
+import be.tbot.moderation.BannedWords;
 import net.dv8tion.jda.api.events.session.ReadyEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.io.*;
 
 public class BotConfig extends ListenerAdapter {
 
